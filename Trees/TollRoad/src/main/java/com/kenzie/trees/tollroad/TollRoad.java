@@ -1,8 +1,8 @@
 package com.kenzie.trees.tollroad;
 
-// import java.util.Comparator;
-// import java.util.Map;
-// import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Application to demonstrate a TreeMap storing key:value pairs in sorted
@@ -10,10 +10,8 @@ package com.kenzie.trees.tollroad;
  * of the same keys based on the results of a Comparator.
  */
 public class TollRoad {
-    // TODO 1: Declare two Map variables to associate String keys with Vehicle objects.
-    // TODO 1: One will sort by vehicle description and one will sort by vehicle state.
-
-
+    private final Map<String, Vehicle> descriptionToVehicle;
+    private final Map<Vehicle, Object> stateToVehicle;
 
     /**
      * TollRoad constructor creates two TreeMaps to store data with
@@ -21,10 +19,8 @@ public class TollRoad {
      * on the state code of each vehicle.
      */
     public TollRoad() {
-        // TODO 2: Create the two TreeMap objects, the second of which must be
-        // TODO 2: given an appropriate Comparator object when constructed.
-
-
+        this.descriptionToVehicle = new TreeMap<>();
+        this.stateToVehicle = new TreeMap<>(new SortStateLicense());
     }
 
     /**
@@ -36,8 +32,13 @@ public class TollRoad {
      * @param description The Vehicle's description.
      */
     public void addToll(String description) {
-        // TODO 3: Complete this method as described in the exercise.
-
+        if (descriptionToVehicle.containsKey(description)) {
+            descriptionToVehicle.get(description).addToll();
+        } else {
+            Vehicle newCar = new Vehicle(description);
+            descriptionToVehicle.put(newCar.description, newCar);
+            stateToVehicle.put(newCar, new SortStateLicense());
+        }
     }
 
     /**
@@ -47,8 +48,12 @@ public class TollRoad {
      * @return String containing the current vehicles, sorted by description.
      */
     public String getVehicleReportByDescription() {
-        // TODO 4: Complete this method as described in the exercise.
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (Vehicle v : this.descriptionToVehicle.values()) {
+            sb.append(v);
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     /**
@@ -58,8 +63,12 @@ public class TollRoad {
      * @return String containing the current vehicles, sorted by state.
      */
     public String getVehicleReportByState() {
-        // TODO 5: Complete this method as described in the exercise.
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (Vehicle v : this.stateToVehicle.keySet()) {
+            sb.append(v);
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     /**
@@ -104,5 +113,12 @@ public class TollRoad {
 
         System.out.println("Vehicle Tolls By State:");
         System.out.println(tollRoad.getVehicleReportByState());
+    }
+}
+
+class SortStateLicense implements Comparator<Vehicle> {
+    public int compare(Vehicle car1, Vehicle car2) {
+        return car1.description.substring(1)
+                .compareTo(car2.description.substring(1));
     }
 }
