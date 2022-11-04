@@ -10,8 +10,7 @@ import java.util.TreeMap;
 public class ParticipantDirectory {
     // TreeMap storing participants with username as key.
     private final Map<String, Participant> usernameToParticipant;
-
-    // TODO 1a: Declare a TreeMap to store participants with ID as key.
+    private final Map<Integer, Participant> idNumberToParticipant;
 
 
     /**
@@ -21,9 +20,7 @@ public class ParticipantDirectory {
     public ParticipantDirectory() {
         // Create the TreeMap to store participants with username as key.
         this.usernameToParticipant = new TreeMap<>();
-
-        // TODO 1b: Create the TreeMap to store participants with ID as key.
-
+        this.idNumberToParticipant = new TreeMap<>();
     }
 
     /**
@@ -38,10 +35,7 @@ public class ParticipantDirectory {
         // using the username of the Participant, p, as key.
         Participant p = new Participant(idNumber, username, fullname);
         this.usernameToParticipant.put(p.username, p);
-
-        // TODO 2: Store the Participant, p, in the second TreeMap
-        // TODO 2: using the idNumber attribute of p as key.
-
+        this.idNumberToParticipant.put(p.idNumber, p);
     }
 
     /**
@@ -64,9 +58,7 @@ public class ParticipantDirectory {
      * @return Participant object mapped to the given username; null if username not in map.
      */
     public Participant getParticipantByID(Integer idNumber) {
-        // TODO 3: Return the Participant associated with the given idNumber
-        // TODO 3: using the second TreeMap created in step 1.
-        return null;
+        return this.idNumberToParticipant.get(idNumber);
     }
 
     /**
@@ -92,9 +84,12 @@ public class ParticipantDirectory {
      * @return String containing the current roster, sorted by ID number.
      */
     public String getRosterByID() {
-        // TODO 4: Use the second TreeMap created in step 1 to build and return
-        // TODO 4: return a String containing a participant roster sorted by ID.
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (Participant p : this.idNumberToParticipant.values()) {
+        sb.append(p);
+        sb.append("\n");
+        }
+        return sb.toString();
     }
 
     /**
@@ -117,7 +112,11 @@ public class ParticipantDirectory {
         System.out.println("Participant Roster By Username:");
         System.out.println(dir.getRosterByUsername());
 
-        // TODO 5 (optional): Add a bit of test code for the new TreeMap.
+        System.out.println("Pariticipant '3': " +
+                dir.getParticipantByID(3));
+        
+        System.out.println("Participant Roster By IdNuber:");
+        System.out.println(dir.getRosterByID());
 
     }
 }
