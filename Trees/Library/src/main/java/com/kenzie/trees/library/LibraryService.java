@@ -2,8 +2,6 @@ package com.kenzie.trees.library;
 
 import com.kenzie.trees.library.treestructure.BookNode;
 
-import org.apache.commons.lang.NotImplementedException;
-
 /**
  * Application to test traversing Binary Trees and Binary Search Trees.
  *
@@ -37,11 +35,12 @@ public class LibraryService {
      *         false otherwise
      */
     public boolean isBookInLibraryByIsbn(String isbn) {
-        // PARTICIPANTS: IMPLEMENT YOUR BINARY SEARCH HERE
-
-        throw new NotImplementedException("isBookInLibraryByIsbn is not yet implemented!");
+        if (isbn == null || isbn.isEmpty()) {
+            return false;
+        } else {
+            return binarySearch(books, isbn);
+        }
     }
-
 
     /**
      * Determines whether or not a book is in the library
@@ -53,8 +52,41 @@ public class LibraryService {
      *         false otherwise
      */
     public boolean isBookInLibraryByTitleAndAuthor(String title, String author) {
-        // PARTICIPANTS: IMPLEMENT YOUR DEPTH FIRST SEARCH HERE
+        if (title == null || author == null) {
+            return false;
+        }
+        return recursiveDepthFirstSearch(books, title, author);
+    }
 
-        throw new NotImplementedException("isBookInLibraryByTitleAndAuthor is not yet implemented!");
+    public boolean binarySearch(BookNode node, String isbn) {
+        int comparison = node.getBook().getIsbn().compareTo(isbn);
+
+        if (comparison == 0) {
+            return true;
+        } else if (comparison > 0 && node.getLeft() != null) {
+            return binarySearch(node.getLeft(), isbn);
+        } else if (comparison < 0 && node.getRight() != null) {
+            return binarySearch(node.getRight(), isbn);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean recursiveDepthFirstSearch(BookNode node, String title, String author) {
+        boolean itsAMatch;
+
+        if (node == null) {
+            return false;
+        }
+
+        if (node.getBook().getAuthor() == author
+                && node.getBook().getTitle() == title) {
+            itsAMatch = true;
+        } else {
+            itsAMatch = false;
+        }
+        return  itsAMatch
+                || recursiveDepthFirstSearch(node.getLeft(), title, author)
+                || recursiveDepthFirstSearch(node.getRight(), title, author);
     }
 }
