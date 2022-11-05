@@ -73,19 +73,12 @@ public class LibraryService {
     }
 
     public boolean recursiveDepthFirstSearch(BookNode node, String title, String author) {
-        boolean itsAMatch;
-
         if (node == null) {
             return false;
         }
 
-        if (node.getBook().getAuthor() == author
-                && node.getBook().getTitle() == title) {
-            itsAMatch = true;
-        } else {
-            itsAMatch = false;
-        }
-        return  itsAMatch
+        return  (node.getBook().getAuthor() == author)
+                && (node.getBook().getTitle() == title)
                 || recursiveDepthFirstSearch(node.getLeft(), title, author)
                 || recursiveDepthFirstSearch(node.getRight(), title, author);
     }
