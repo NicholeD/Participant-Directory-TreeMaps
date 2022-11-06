@@ -5,9 +5,16 @@ import com.kenzie.groupwork.phonecontacts.model.Name;
 import com.kenzie.groupwork.phonecontacts.model.SortBy;
 import com.kenzie.groupwork.phonecontacts.model.SortOrder;
 
+import java.util.Comparator;
 import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static com.kenzie.groupwork.phonecontacts.model.SortBy.FIRST_NAME;
+import static com.kenzie.groupwork.phonecontacts.model.SortBy.LAST_NAME;
+import static com.kenzie.groupwork.phonecontacts.model.SortOrder.ASCENDING;
+import static com.kenzie.groupwork.phonecontacts.model.SortOrder.DESCENDING;
 
 /**
  * Class for accessing contacts data.
@@ -20,11 +27,10 @@ public class ContactDao {
     private final SortedMap<Name, Contact> contactsSortedByFirstName;
     private final SortedMap<Name, Contact> contactsSortedByLastName;
 
-
     @Inject
     public ContactDao() {
-        this.contactsSortedByFirstName = null;
-        this.contactsSortedByLastName = null;
+        this.contactsSortedByFirstName = new TreeMap<>(Comparator.comparing(Name::getFirstName));
+        this.contactsSortedByLastName = new TreeMap<>(Comparator.comparing(Name::getLastName));
     }
 
     /**
@@ -46,8 +52,20 @@ public class ContactDao {
      * @return map of name to contacts in requested sorted order.
      */
     public SortedMap<Name, Contact> getContacts(SortBy sortBy, SortOrder sortOrder) {
-        // TODO implement
-        return null;
+        if (sortBy == FIRST_NAME) {
+            if (sortOrder == ASCENDING) {
+                return contactsSortedByFirstName;
+            } else if (sortOrder == DESCENDING) {
+                return new TreeMap<>(contactsSortedByFirstName).descendingMap();
+            }
+        } else if (sortBy == LAST_NAME) {
+            if (sortOrder == ASCENDING) {
+                return contactsSortedByLastName;
+            } else if (sortOrder == DESCENDING) {
+                return new TreeMap<>(contactsSortedByLastName).descendingMap();
+            }
+        }
+        return contactsSortedByLastName;
     }
 
     /**
@@ -69,8 +87,12 @@ public class ContactDao {
      * order.
      */
     public SortedMap<Name, Contact> getContactsStartingAt(Name startKey, SortBy sortBy, SortOrder sortOrder) {
-        // TODO implement
-        return null;
+        SortedMap<Name, Contact> contactsStartingAt = getContacts(sortBy, sortOrder);
+        return contactsStartingAt.tailMap(startKey);
     }
 
+    public void removeContact(Name name) {
+        contactsSortedByLastName.remove(name);
+        contactsSortedByFirstName.remove(name);
+    }
 }
