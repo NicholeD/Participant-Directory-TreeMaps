@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MusicAccountRetrieverTest {
 
     @Test
-    public void retrieveAccounts_retrievingResults_correctResults() {
+    public void retrieveAccounts_retrievingResults_correctResults() throws InterruptedException {
         // GIVEN
         MusicAccountService accountService = new MusicAccountService();
         MusicAccountRetriever retrieverTest = new MusicAccountRetriever();
