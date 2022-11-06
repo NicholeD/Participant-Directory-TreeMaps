@@ -38,7 +38,7 @@ public class LibraryService {
         if (isbn == null || isbn.isEmpty()) {
             return false;
         } else {
-            return binarySearch(books, isbn);
+            return recursiveBinarySearch(books, isbn);
         }
     }
 
@@ -58,15 +58,15 @@ public class LibraryService {
         return recursiveDepthFirstSearch(books, title, author);
     }
 
-    public boolean binarySearch(BookNode node, String isbn) {
+    public boolean recursiveBinarySearch(BookNode node, String isbn) {
         int comparison = node.getBook().getIsbn().compareTo(isbn);
 
         if (comparison == 0) {
             return true;
         } else if (comparison > 0 && node.getLeft() != null) {
-            return binarySearch(node.getLeft(), isbn);
+            return recursiveBinarySearch(node.getLeft(), isbn);
         } else if (comparison < 0 && node.getRight() != null) {
-            return binarySearch(node.getRight(), isbn);
+            return recursiveBinarySearch(node.getRight(), isbn);
         } else {
             return false;
         }
